@@ -1,12 +1,12 @@
 from pysat.solvers import Glucose3
-from Helper import GenGraph, GenGraph_Incremental, Mapper, GenClauses_44_init, GenClauses_44_adder
+from Helper import GenGraph, GenGraph_Incremental, Mapper, GenClauses_35_init, GenClauses_35_adder
 
 
 
-def Ramsey_44():
-    N = 4
+def Ramsey_35():
+    N = 5
     graph = GenGraph(N)
-    clauses = GenClauses_44_init(N, graph)
+    clauses = GenClauses_35_init(N, graph)
     solver = Glucose3()
 
     arc_0_1 = Mapper(0, 1, graph)
@@ -25,7 +25,7 @@ def Ramsey_44():
         #return True
 
     else:
-        print("unsatisfiable \nthe Ramsey numeber for R(4,4) is: ")
+        print("unsatisfiable \nthe Ramsey numeber for R(3,5) is: ")
         print(N+1)
         return
   
@@ -34,15 +34,9 @@ def Ramsey_44():
     while True:
     
         graph = GenGraph_Incremental(N,graph)
-        clauses_add = GenClauses_44_adder(N, graph)
+        clauses_add = GenClauses_35_adder(N, graph)
 
-        arc_0_N = Mapper(0, N, graph)
-
-        if N <= 8:
-            clauses_add.append([arc_0_N])
-        else:
-            clauses_add.append([-arc_0_N])
-
+        
 
         for clause in clauses_add:
             solver.add_clause(clause)
@@ -59,7 +53,7 @@ def Ramsey_44():
             #return True
 
         else:
-            print("unsatisfiable \nthe Ramsey numeber for R(4,4) is: ")
+            print("unsatisfiable \nthe Ramsey numeber for R(3,5) is: ")
             print(N+1)
             return
 
@@ -68,4 +62,4 @@ def Ramsey_44():
 
     
 
-Ramsey_44()
+Ramsey_35()
