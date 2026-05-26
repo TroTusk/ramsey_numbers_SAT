@@ -310,26 +310,50 @@ def GenClauses_36_adder(new_node, graph):
     new_node_arcs = []
     # add the arcs of the new node to the list of arcs
     for i in range(new_node):
-        new_node_arcs.append(Mapper(i, new_node, graph))
-        
+      new_node_arcs.append(Mapper(i, new_node, graph))
+
+
+
     if len(new_node_arcs) > 5:
-        # add the rule that the new node can have at most 5 arcs of the same color
-        # top_id is set to a large number to avoid conflicts with existing variables
-        # + (new_node * 1000) is important to avoid conflicts with previous new nodes
-        sbp_clauses = CardEnc.atmost(lits=new_node_arcs, bound=5, top_id=100000 + (new_node * 1000))
-        for clause in sbp_clauses.clauses:
-            new_clauses.append(clause)
+      # add the rule that the new node can have at most 5 arcs of the same color
+      # top_id is set to a large number to avoid conflicts with existing variables
+      # + (new_node * 1000) is important to avoid conflicts with previous new nodes
+      sbp_clauses = CardEnc.atmost(lits=new_node_arcs, bound=5, top_id=100000 + (new_node * 1000))
+      for clause in sbp_clauses.clauses:
+        new_clauses.append(clause)
 
     node_arcs_len = len(new_node_arcs)
     min_negative = node_arcs_len - 13
     
     if min_negative > 0:
-        # add the rule that the new node must have at least min_negative arcs of the same color
-        sbp_clauses_min = CardEnc.atleast(lits=new_node_arcs, bound=min_negative, top_id=200000 + (new_node * 1000))
-        for clause in sbp_clauses_min.clauses:
-            new_clauses.append(clause)
-        print("bruhhh")
+      # add the rule that the new node must have at least min_negative arcs of the same color
+      # top_id is set to a large number to avoid conflicts with existing variables
+      sbp_clauses_min = CardEnc.atleast(lits=new_node_arcs, bound=min_negative, top_id=200000 + (new_node * 1000))
+      for clause in sbp_clauses_min.clauses:
+        new_clauses.append(clause)
+      
+
+    
+    # adding the 18th node
+    if new_node == 17:
+      print("processing the 18th node")
+      all_arcs = []
+      # get all the arcs of the graph
+      for a in range(new_node + 1):
+        for b in range(a + 1, new_node + 1):
+          all_arcs.append(Mapper(a, b, graph))
+
+      # positive arcs must be between 36 and 45
+      # top_id is set to a large number to avoid conflicts with existing variables
+      positive_min = CardEnc.atleast(lits=all_arcs, bound=36, top_id=500000)
+      positive_max = CardEnc.atmost(lits=all_arcs, bound=45, top_id=600000)
+
+      # add the clauses to the list of new clauses
+      for clause in positive_min.clauses:
+        new_clauses.append(clause)
+      for clause in positive_max.clauses:
+        new_clauses.append(clause)
+
+    new_clauses.append([-Mapper(0, new_node, graph)])
 
     return new_clauses
-
-
