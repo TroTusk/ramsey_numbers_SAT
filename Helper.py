@@ -1,3 +1,5 @@
+import itertools
+
 from pysat.formula import CNF
 from pysat.solvers import Glucose3
 from pysat.card import CardEnc, EncType
@@ -356,4 +358,75 @@ def GenClauses_36_adder(new_node, graph):
 
     new_clauses.append([-Mapper(0, new_node, graph)])
 
+    return new_clauses
+
+
+
+
+#R(5,5)
+
+def GenClauses_55_adder(new_node, graph):
+    new_clauses = []
+    
+    # choose 4 nodes
+    for clique in itertools.combinations(range(new_node), 4):
+        
+        # group is formed by the new node and 4 nodes
+        full_clique = list(clique) + [new_node]
+        
+        neg_clause = []
+        pos_clause = []
+        
+       
+        for i, j in itertools.combinations(full_clique, 2):
+            arc = Mapper(i, j, graph)
+            
+            neg_clause.append(-arc)
+            
+            pos_clause.append(arc)
+            
+        new_clauses.append(neg_clause)
+        new_clauses.append(pos_clause)
+        
+    new_node_arcs = [Mapper(i, new_node, graph) for i in range(new_node)]
+    
+
+    # with the knowledge of R(4,5) = 25, 
+    # we can set that the graph must have atmost 24 arcs of the same color
+    if len(new_node_arcs) > 24:
+        sbp_max = CardEnc.atmost(lits=new_node_arcs, bound=24, top_id=100000 + (new_node * 1000))
+        for clause in sbp_max.clauses:
+            new_clauses.append(clause)
+            
+    min_archi = len(new_node_arcs) - 24
+    if min_archi > 0:
+        sbp_min = CardEnc.atleast(lits=new_node_arcs, bound=min_archi, top_id=200000 + (new_node * 1000))
+        for clause in sbp_min.clauses:
+            new_clauses.append(clause)
+
+    return new_clauses
+
+
+def GenClauses_55_init(N, graph):
+    new_clauses = []
+    
+    # choose 5 nodes directly from the initial N nodes
+    for clique in itertools.combinations(range(N), 5):
+        
+        neg_clause = []
+        pos_clause = []
+        
+        # get all the 10 arcs between these 5 nodes
+        for i, j in itertools.combinations(clique, 2):
+            arc = Mapper(i, j, graph)
+            
+            # adding negative clauses
+            neg_clause.append(-arc)
+            
+            # adding positive clauses
+            pos_clause.append(arc)
+            
+        new_clauses.append(neg_clause)
+        new_clauses.append(pos_clause)
+        
     return new_clauses
