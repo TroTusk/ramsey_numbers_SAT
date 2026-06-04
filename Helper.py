@@ -1,11 +1,10 @@
 import itertools
-
 from pysat.formula import CNF
 from pysat.solvers import Glucose3
 from pysat.card import CardEnc, EncType
 
 
-
+# function to initialize a graph with a given size
 def GenGraph(graph_size):
 
   graph_map = {}
@@ -13,7 +12,7 @@ def GenGraph(graph_size):
 
   for x in range(graph_size):
     for y in range(x + 1,graph_size):
-      if (x>y):
+      if (x>y): # to ensure that the smaller node is always the first one in the tuple
         graph_map[(y,x)] = k
       else:
         graph_map[(x,y)] = k
@@ -24,7 +23,7 @@ def GenGraph(graph_size):
 
 
 
-
+# function to add a new node to the graph and connect it to all existing nodes
 def GenGraph_Incremental(new_node, graph):
 
   k = len(graph) + 1
@@ -33,18 +32,8 @@ def GenGraph_Incremental(new_node, graph):
     k+=1
   return graph
 
-"""
-def GenGraph_Incremental_adder(new_node, graph):
 
-  k = len(graph) + 1
-  added_arcs = {}
-  for x in range(new_node):
-    added_arcs[(x, new_node)] = k
-    k+=1
-  return added_arcs
-"""
-
-
+# function to get the arc between two nodes
 def Mapper(x,y, graph):
   if(x>y):
     return graph[(y,x)]
@@ -55,6 +44,7 @@ def Mapper(x,y, graph):
 
 
 #R(3,3)
+# function to generate the clauses for R(3,3) problem
 def GenClauses_three(graph_size, graph):
   clauses = []
   for a in range(graph_size):
@@ -78,6 +68,7 @@ def GenClauses_three(graph_size, graph):
 
 
 #R(4,4)
+# function to generate the starting clauses for R(4,4) problem
 def GenClauses_44_init(graph_size, graph):
   clauses = []
   for a in range(graph_size):
@@ -101,7 +92,7 @@ def GenClauses_44_init(graph_size, graph):
           clauses.append(clause_positive)
   return clauses
 
-
+# function to add the clauses for the new node in R(4,4) problem
 def GenClauses_44(new_node, clauses, graph):
   
   for a in range(new_node):
@@ -345,7 +336,7 @@ def GenClauses_36_adder(new_node, graph):
         for b in range(a + 1, new_node + 1):
           all_arcs.append(Mapper(a, b, graph))
 
-      # positive arcs must be between 36 and 45
+      # positive arcs must be between 36 and 45 
       # top_id is set to a large number to avoid conflicts with existing variables
       positive_min = CardEnc.atleast(lits=all_arcs, bound=36, top_id=500000)
       positive_max = CardEnc.atmost(lits=all_arcs, bound=45, top_id=600000)
