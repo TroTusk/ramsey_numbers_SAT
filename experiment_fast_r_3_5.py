@@ -92,7 +92,7 @@ def Ramsey_35():
 
         # return the solution
         model = solver.get_model()
-        print("solution: ", model)
+        print(f"solution for {N+1} nodes: {model}")
 
     else:
         print("unsatisfiable \nthe Ramsey numeber for R(3,5) is: ")
@@ -125,7 +125,7 @@ def Ramsey_35():
 
             # return the solution
             model = solver.get_model()
-            print("solution: ", model)            
+            print(f"solution for {N+1} nodes: {model}")
 
         else:
             print("unsatisfiable \nthe Ramsey numeber for R(3,5) is: ")

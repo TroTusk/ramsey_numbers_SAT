@@ -94,7 +94,7 @@ def Ramsey_55():
         # print the solution, calculating tot_arcs is necessary to filter the arcs added by using top_id in the GenClauses
         tot_arcs = (N * (N - 1)) // 2
         clean_model = [v for v in solver.get_model() if abs(v) <= tot_arcs]
-        print(f"solution for {N} nodes: {clean_model}")
+        print(f"solution for {N+1} nodes: {clean_model}")
 
     else:
         print("unsatisfiable \nthe Ramsey number for R(5,5) is: ")
@@ -119,7 +119,7 @@ def Ramsey_55():
             # print the solution, calculating tot_arcs is necessary to filter the arcs added by using top_id in the GenClauses
             tot_arcs = ((N + 1) * N) // 2
             clean_model = [v for v in solver.get_model() if abs(v) <= tot_arcs]
-            print(f"solution for {N} nodes: {clean_model}")
+            print(f"solution for {N+1} nodes: {clean_model}")
 
         else:
             print("unsatisfiable \nthe Ramsey number for R(5,5) is: ")

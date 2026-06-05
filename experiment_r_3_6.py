@@ -171,7 +171,7 @@ def Ramsey_36():
 
         # return the solution
         model = solver.get_model()
-        print("solution: ", model)
+        print(f"solution for {N+1} nodes: {model}")
 
     else:
         print("unsatisfiable \nthe Ramsey numeber for R(3,6) is: ")
@@ -204,7 +204,7 @@ def Ramsey_36():
             tot_arcs = ((N + 1) * N) // 2
             # we filter the model to only include the variables that correspond to arcs in the graph
             model = [v for v in solver.get_model() if abs(v) < tot_arcs]
-            print(f"solution: {model}")
+            print(f"solution for {N+1} nodes: {model}")
 
         else:
             print("unsatisfiable \nthe Ramsey numeber for R(3,6) is: ")

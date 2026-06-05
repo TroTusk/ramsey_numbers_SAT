@@ -85,7 +85,7 @@ def Ramsey_44():
 
         # return the solution
         model = solver.get_model()
-        print("solution: ", model)
+        print(f"solution for {N+1} nodes: {model}")
         
     else:
         print("unsatisfiable \nthe Ramsey numeber for R(4,4) is: ")
@@ -122,7 +122,7 @@ def Ramsey_44():
 
             # return the solution
             model = solver.get_model()
-            print("solution: ", model)
+            print(f"solution for {N+1} nodes: {model}")
             #return True
 
         else:
